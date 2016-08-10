@@ -3,6 +3,8 @@ VENDOR_GOPATH=$(shell pwd)/vendor
 GOPATH=$(VENDOR_GOPATH)
 APP_NAME=goslash-sample-server
 
+all: install build
+
 install:
 	mkdir -p $(VENDOR_GOPATH)
 	go get golang.org/x/tools/cmd/cover
@@ -18,17 +20,17 @@ install:
 	go get -u github.com/PuerkitoBio/goquery
 
 clean:
-	rm $(APP_NAME)
+	rm -f $(APP_NAME)
 	rm -rf $(VENDOR_GOPATH)
 
 fmt:
 	gofmt -w ./src/server.go
 
-run:
+run: install
 	go run ./src/server.go -dev
 
-build:
+build: install
 	go build -o $(APP_NAME) ./src/server.go
 
-test:
+test: install
 	GOPATH=$(VENDOR_GOPATH):$(ROOT_GOPATH) go test -v ./src/...
